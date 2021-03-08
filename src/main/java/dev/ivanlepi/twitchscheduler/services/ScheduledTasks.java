@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import dev.ivanlepi.twitchscheduler.models.Game;
@@ -18,7 +19,7 @@ public class ScheduledTasks {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScheduledTasks.class);
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.GERMANY);
 
     private final Twitch twitchService;
 
@@ -29,7 +30,6 @@ public class ScheduledTasks {
     // Update our database with Top Clips every day at 1 AM.
     @Scheduled(cron = "0 0 1 * * ?")
     public void updateTopClips() {
-        LOG.info("The time is now {}", dateFormat.format(new Date()));
         LOG.info("Updating Top Clips");
         updateDb(false);
     }
@@ -37,7 +37,6 @@ public class ScheduledTasks {
     // Update our database with Trending Clips every 3 hours.
     @Scheduled(cron = "0 0 */3 ? * *")
     public void updateTrendingClips() {
-        LOG.info("The time is now {}", dateFormat.format(new Date()));
         LOG.info("Updating Trending Clips");
 
         updateDb(true);
@@ -69,6 +68,6 @@ public class ScheduledTasks {
         long currentDate = new Date().getTime();
         long newDate = currentDate - 86400000;
         String startDate = dateFormat.format(new Date(newDate));
-        return startDate.substring(0, (startDate.length() - 6)).concat("Z"); // change once we have different timezone
+        return startDate;
     }
 }
