@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import dev.ivanlepi.twitchscheduler.models.Game;
 import dev.ivanlepi.twitchscheduler.repository.ClipsRepository;
 import dev.ivanlepi.twitchscheduler.repository.GameRepository;
+import dev.ivanlepi.twitchscheduler.repository.TopClipsRepository;
 import dev.ivanlepi.twitchscheduler.models.Feed;
 import dev.ivanlepi.twitchscheduler.models.ClipsFeed;
 import dev.ivanlepi.twitchscheduler.models.Clip;
@@ -22,18 +23,20 @@ public class Twitch extends ApiBinding {
 
     private GameRepository gameRepository;
     private ClipsRepository clipsRepository;
+    private TopClipsRepository topClipsRepository;
 
  
-    public Twitch(String accessToken, GameRepository gameRepository, ClipsRepository clipsRepository) {
+    public Twitch(String accessToken, GameRepository gameRepository, ClipsRepository clipsRepository, TopClipsRepository topClipsRepository) {
         super(accessToken);
         this.gameRepository = gameRepository;
         this.clipsRepository = clipsRepository;
+        this.topClipsRepository = topClipsRepository;
     }
 
     /**
-     * This method updates our database with top 20 games from Twitch API.
+     * This method updates our database with top 100 games from Twitch API.
      * 
-     * @return Nothing.
+     * @return List<Game>
      */
     public List<Game> updateGames() {
         List<Game> listOfGames = restTemplate.getForObject(TWITCH_API_BASE_URL + "/games/top?first=100", Feed.class)
@@ -67,13 +70,26 @@ public class Twitch extends ApiBinding {
                     .getData();
         } else {
             listOfClips = restTemplate.getForObject(
-                    TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=60" + "&started_at=" + startDate.get(),
+                    TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=100" + "&started_at=" + startDate.get(),
                     ClipsFeed.class).getData();
         }
 
         // Iterate over list of clips and update the database
         for (Clip clip : listOfClips) {
-            clipsRepository.save(clip);
+            if(!startDate.isPresent()){
+                clipsRepository.save(clip);
+            } else {
+                topClipsRepository.save(clip);
+            }
+            
+        }
+    }
+
+    public void cleanDb(boolean trending) {
+        if(trending){
+            topClipsRepository.deleteAll();
+        }else {
+            clipsRepository.deleteAll();
         }
     }
 }

@@ -31,6 +31,7 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 0 1 * * ?")
     public void updateTopClips() {
         LOG.info("Updating Top Clips");
+        twitchService.cleanDb(false);
         updateDb(false);
     }
 
@@ -38,7 +39,7 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 0 */3 ? * *")
     public void updateTrendingClips() {
         LOG.info("Updating Trending Clips");
-
+        twitchService.cleanDb(true);
         updateDb(true);
     }
 
@@ -63,10 +64,10 @@ public class ScheduledTasks {
 
     }
 
-    // Calculate 24 hours earlier date.
+    // Calculate 48 hours earlier date.
     private String startDate() {
         long currentDate = new Date().getTime();
-        long newDate = currentDate - 86400000;
+        long newDate = currentDate - 172800000;
         String startDate = dateFormat.format(new Date(newDate));
         return startDate;
     }
