@@ -8,5 +8,7 @@ The data is stored in MongoDB database that is a Mongo Docker Container.
 
 For more info look at the more detailed readme at [Twitch Clips Application](https://github.com/IvanLepi/twitchclips)
 
-
+## TODO
+  * Refactor the code
+  * Integrate testing
 
