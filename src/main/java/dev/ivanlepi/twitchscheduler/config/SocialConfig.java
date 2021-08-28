@@ -51,12 +51,10 @@ public class SocialConfig {
 
 			String response3 = requestSpec1.retrieve().bodyToMono(String.class).block();
 
-			// Get the Access Token From the recieved JSON response
+			// Get the Access Token From the received JSON response
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode node = mapper.readTree(response3);
-			String token = node.path("access_token").asText();
-
-			accessToken = token;
+			accessToken = node.path("access_token").asText();
 
 		} catch (Exception e) {
 			log.info("Failed to obtain access Token");

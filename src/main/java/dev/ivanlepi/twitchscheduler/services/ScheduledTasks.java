@@ -19,7 +19,7 @@ public class ScheduledTasks {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScheduledTasks.class);
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.GERMANY);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.GERMANY);
 
     private final Twitch twitchService;
 
@@ -68,7 +68,6 @@ public class ScheduledTasks {
     private String startDate() {
         long currentDate = new Date().getTime();
         long newDate = currentDate - 172800000;
-        String startDate = dateFormat.format(new Date(newDate));
-        return startDate;
+        return dateFormat.format(new Date(newDate));
     }
 }

@@ -10,13 +10,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class }) // TODO REMOVE for release
 @EnableAsync
 @EnableScheduling
-public class TwitchschedulerApplication {
+public class TwitchSchedulerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TwitchschedulerApplication.class, args);
+		SpringApplication.run(TwitchSchedulerApplication.class, args);
 	}
 
 	@Bean

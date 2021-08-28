@@ -2,7 +2,6 @@ package dev.ivanlepi.twitchscheduler.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.ArrayList;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,9 @@ public class Twitch extends ApiBinding {
 
     private static final String TWITCH_API_BASE_URL = "https://api.twitch.tv/helix";
 
-    private GameRepository gameRepository;
-    private ClipsRepository clipsRepository;
-    private TopClipsRepository topClipsRepository;
+    private final GameRepository gameRepository;
+    private final ClipsRepository clipsRepository;
+    private final TopClipsRepository topClipsRepository;
 
  
     public Twitch(String accessToken, GameRepository gameRepository, ClipsRepository clipsRepository, TopClipsRepository topClipsRepository) {
@@ -42,7 +41,7 @@ public class Twitch extends ApiBinding {
         List<Game> listOfGames = restTemplate.getForObject(TWITCH_API_BASE_URL + "/games/top?first=100", Feed.class)
                 .getData();
 
-        // Empty the database to see if its updating properly
+        // Empty the database to see if it is updating properly
         gameRepository.deleteAll();
 
         // Iterate over List of games and update the database
@@ -53,18 +52,18 @@ public class Twitch extends ApiBinding {
     }
 
     /**
-     * This method updates our database with clips for particular Game.
+     * This method updates our database with clips for a particular Game.
      * 
      * @param game_id Every Game has its own game_id field.
      */
     @Async
     public void getAsyncClips(String game_id, Optional<String> startDate) throws InterruptedException {
 
-        List<Clip> listOfClips = new ArrayList<>();
+        List<Clip> listOfClips;
 
         LOG.info("Looking up clips {}", game_id);
 
-        if (!startDate.isPresent()) {
+        if (startDate.isEmpty()) {
             listOfClips = restTemplate
                     .getForObject(TWITCH_API_BASE_URL + "/clips/?game_id=" + game_id + "&first=100", ClipsFeed.class)
                     .getData();
@@ -76,7 +75,7 @@ public class Twitch extends ApiBinding {
 
         // Iterate over list of clips and update the database
         for (Clip clip : listOfClips) {
-            if(!startDate.isPresent()){
+            if(startDate.isEmpty()){
                 clipsRepository.save(clip);
             } else {
                 topClipsRepository.save(clip);
