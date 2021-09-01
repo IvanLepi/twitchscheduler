@@ -11,4 +11,4 @@ For more info look at the more detailed readme at [Twitch Clips Application](htt
 ## TODO
   * Refactor the code
   * Integrate testing
-
+  * Enforce the singleton property with a private construcor or an enum type. Item 3 Effective Java
