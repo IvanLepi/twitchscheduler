@@ -32,7 +32,7 @@ public class ScheduledTasks {
     public void updateTopClips() {
         LOG.info("Updating Top Clips");
         twitchService.cleanDb(false);
-        updateDb(false);
+        updateDb(false); // TODO REFACTOR THIS METHOD with something other than true/false.
     }
 
     // Update our database with Trending Clips every 3 hours.
