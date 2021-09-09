@@ -40,7 +40,7 @@ public class ScheduledTasks {
     public void updateTrendingClips() {
         LOG.info("Updating Trending Clips");
         twitchService.cleanDb(true);
-        updateDb(true);
+        updateDb(true); // TODO REFACTOR THIS METHOD with something other than true/false.
     }
 
     private void updateDb(Boolean trending) {
