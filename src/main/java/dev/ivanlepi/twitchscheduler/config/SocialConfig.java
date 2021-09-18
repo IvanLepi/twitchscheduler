@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.ivanlepi.twitchscheduler.repository.ClipsRepository;
 import dev.ivanlepi.twitchscheduler.repository.GameRepository;
-import dev.ivanlepi.twitchscheduler.repository.TopClipsRepository;
 import dev.ivanlepi.twitchscheduler.services.Twitch;
 
 @Configuration
@@ -28,15 +27,13 @@ public class SocialConfig {
 
 	private GameRepository gameRepo;
 	private ClipsRepository clipRepo;
-	private TopClipsRepository topRepo;
 
 	final Logger log = LoggerFactory.getLogger(SocialConfig.class);
 
 	@Bean
-	public Twitch twitch(GameRepository gameRepository, ClipsRepository clipRepository, TopClipsRepository topClipsRepository) {
+	public Twitch twitch(GameRepository gameRepository, ClipsRepository clipRepository) {
 		this.gameRepo = gameRepository;
 		this.clipRepo = clipRepository;
-		this.topRepo = topClipsRepository;
 		String accessToken = "";
 		try {
 			log.info("Obtaining new access Token");
@@ -60,6 +57,6 @@ public class SocialConfig {
 			log.info("Failed to obtain access Token");
 			e.printStackTrace();
 		}
-		return new Twitch(accessToken, gameRepo, clipRepo, topRepo);
+		return new Twitch(accessToken, gameRepo, clipRepo);
 	}
 }

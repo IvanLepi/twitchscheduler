@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import dev.ivanlepi.twitchscheduler.models.Game;
 import dev.ivanlepi.twitchscheduler.repository.ClipsRepository;
 import dev.ivanlepi.twitchscheduler.repository.GameRepository;
-import dev.ivanlepi.twitchscheduler.repository.TopClipsRepository;
 import dev.ivanlepi.twitchscheduler.models.Feed;
 import dev.ivanlepi.twitchscheduler.models.ClipsFeed;
 import dev.ivanlepi.twitchscheduler.models.Clip;
@@ -22,14 +21,11 @@ public class Twitch extends ApiBinding {
 
     private final GameRepository gameRepository;
     private final ClipsRepository clipsRepository;
-    private final TopClipsRepository topClipsRepository;
-
  
-    public Twitch(String accessToken, GameRepository gameRepository, ClipsRepository clipsRepository, TopClipsRepository topClipsRepository) {
+    public Twitch(String accessToken, GameRepository gameRepository, ClipsRepository clipsRepository) {
         super(accessToken);
         this.gameRepository = gameRepository;
         this.clipsRepository = clipsRepository;
-        this.topClipsRepository = topClipsRepository;
     }
 
     /**
@@ -75,20 +71,7 @@ public class Twitch extends ApiBinding {
 
         // Iterate over list of clips and update the database
         for (Clip clip : listOfClips) {
-            if(startDate.isEmpty()){
-                clipsRepository.save(clip);
-            } else {
-                topClipsRepository.save(clip);
-            }
-            
-        }
-    }
-
-    public void cleanDb(boolean trending) {
-        if(trending){
-            topClipsRepository.deleteAll();
-        }else {
-            clipsRepository.deleteAll();
+            clipsRepository.save(clip);
         }
     }
 }

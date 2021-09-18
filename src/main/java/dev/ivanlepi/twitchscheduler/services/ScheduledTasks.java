@@ -31,7 +31,6 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 0 1 * * ?")
     public void updateTopClips() {
         LOG.info("Updating Top Clips");
-        twitchService.cleanDb(false);
         updateDb(false); // TODO REFACTOR THIS METHOD with something other than true/false.
     }
 
@@ -39,7 +38,6 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 0 */3 ? * *")
     public void updateTrendingClips() {
         LOG.info("Updating Trending Clips");
-        twitchService.cleanDb(true);
         updateDb(true); // TODO REFACTOR THIS METHOD with something other than true/false.
     }
 
@@ -48,7 +46,6 @@ public class ScheduledTasks {
         try {
             List<Game> listOfGames = twitchService.updateGames();
 
-            // Kick of multiple, asynchronous lookups
             for (Game game : listOfGames) {
                 if (!trending) {
                     twitchService.getAsyncClips(game.getId(), Optional.empty());
