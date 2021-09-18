@@ -61,6 +61,9 @@ public class ScheduledTasks {
 
     }
 
+    /**
+     * @return Formatted date string suitable for Twitch endpoints.
+     */
     // Calculate 48 hours earlier date.
     private String startDate() {
         long currentDate = new Date().getTime();

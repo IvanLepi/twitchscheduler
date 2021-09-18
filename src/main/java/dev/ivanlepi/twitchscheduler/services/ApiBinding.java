@@ -31,6 +31,10 @@ public abstract class ApiBinding {
 
     }
 
+    /**
+     * @param accessToken The access token we generated at the start of the application.
+     * @return returns intercepted request with updated headers.
+     */
     private ClientHttpRequestInterceptor getBearerTokenInterceptor(String accessToken) {
         return new ClientHttpRequestInterceptor() {
             @Override
