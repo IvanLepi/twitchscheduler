@@ -1,4 +1,4 @@
-# Twitch Scheduler [![Build Status](https://app.travis-ci.com/IvanLepi/twitchscheduler.svg?branch=main)](https://travis-ci.org/IvanLepi/twitchscheduler)
+# Twitch Scheduler [![Build Status](https://app.travis-ci.com/IvanLepi/twitchscheduler.svg?branch=main)](https://app.travis-ci.com/IvanLepi/twitchscheduler)
 
 ## [Part of Twitch Clips Application](https://github.com/IvanLepi/twitchclips)
 
